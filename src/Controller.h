@@ -1,16 +1,12 @@
 #pragma once
+#include "ofImage.h"
+#include "ofVec2f.h"
+#include "Ability.h"
+
 class Controller
 {
-private:
-
-	float xPosition;
-	float yPosition;
-	float xVelocity;
-	float yVelocity;
-	int maxHealth;
-	int currentHealth;
 	//animationManagerclass
-	//ability class
+
 	float stunDuration;
 	bool isStunned;
 	float iFrameDuration;
@@ -18,8 +14,12 @@ private:
 
 public:
 	
-	void update();
+	virtual void update();
 	void draw();
-	void createAnimation();
 
+	ofImage sprite;
+	ofVec2f position;
+	Ability ability;
+	int maxHealth;
+	int currentHealth;
 };
