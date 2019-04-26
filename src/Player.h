@@ -7,9 +7,14 @@ public:
 	Player();
 	~Player();
 
-	void update() override;
+	void init(const char* sprite);
+	void update(std::vector<Controller*>& towers);
+
+	ofVec2f input;
 
 private:
-	ofVec2f velocity;
+	float moveSpeed = 5.0f;
+	
+	void Move(std::vector<Controller*>& towers);
 };
 

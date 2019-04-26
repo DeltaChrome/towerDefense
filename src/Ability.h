@@ -22,9 +22,9 @@ private:
 public:
 	inline bool IsReady() { return readyToBeUsed; }
 
-	void init();
+	void init() { }
 	void update() { CheckCooldown(); };
-	void draw();
+	void draw() { }
 
 	void StartCooldown()
 	{
