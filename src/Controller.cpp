@@ -10,5 +10,5 @@ void Controller::draw()
 
 bool Controller::checkCollision(Hitbox& hitbox2)
 {
-	return hb.checkCollision(hitbox2);
+	return hb.checkCollision(hitbox2,1,1);
 }
