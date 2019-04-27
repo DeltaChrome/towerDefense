@@ -3,6 +3,9 @@
 
 void Player::init(vector<ofImage> animationFrames)
 {
+
+	position.x = 100;
+	position.y = 650;
 	
 	hb.setHeight(32);
 	hb.setWidth(32);

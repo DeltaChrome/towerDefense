@@ -1,15 +1,13 @@
 #pragma once
 #include "ofMain.h"
-#include "AnimationManager.h"
 
 class GameObject
 {
 private:
-	//ofImage texture;
-	AnimationManager AnimManager;
 
-	//ofImage sprite;
+	ofImage sprite;
 	ofVec2f position;
+	bool visible;
 
 public:
 
@@ -23,9 +21,12 @@ public:
 	float getXPosition() { return position.x; }
 	float getYPosition() { return position.y; }
 
-	void initAnimations();//take in pointer to animations
-
-	void update();
-	void draw();
+	void init(string fileName)
+	{
+		visible = false;
+		sprite.load(fileName);
+	}
+	void update(float deltaTime);
+	void draw() { sprite.draw(position); }
 
 };

@@ -11,8 +11,6 @@ void Animation::update(float deltaTime)
 {
 	currentTime += deltaTime;
 
-	cout << currentTime << endl;
-
 	while (currentTime >= (1.0f / 16.0f))//(float)frameRate of animation
 	{
 		currentTime -= 1.0f / 16.0f;
@@ -24,7 +22,6 @@ void Animation::update(float deltaTime)
 		currentFrame -= animationFrames.size();
 	}
 
-	
 }
 
 void Animation::draw(ofVec2f position)

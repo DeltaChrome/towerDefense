@@ -1,18 +1,4 @@
 #include "ofApp.h"
-#include "Player.h"
-#include "Tower.h"
-#include "Enemy.h"
-#include "Ability.h"
-
-// Global Variables
-Player player;
-Enemy enemy;
-Tower activeTower;
-bool placingTower = true;
-
-vector<Controller*> towers;
-vector<Controller*> enemies;
-vector<ofVec2f> path;
 
 // Functions
 void BoundaryCollision(Controller* dynamic, int width, int height, ofVec4f& boundaries);
@@ -20,7 +6,10 @@ void BoundaryCollision(Controller* dynamic, int width, int height, ofVec4f& boun
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+	mainLevel.init();
 	frameData.init();
+	waves.init();
+
 	path = { ofVec2f(100, 100), ofVec2f(800, 100), ofVec2f(800, 300), ofVec2f(100, 300), ofVec2f(100, 500), ofVec2f(800, 500) };
 
 	player.init(frameData.getAnimation(1));
@@ -35,6 +24,33 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+
+	waves.update(gameTime.GetDeltaTime());
+
+	if (waves.getNewWave())
+	{
+		if (waves.getSpawn())
+		{
+			switch (waves.getEnemyLevel())
+			{
+			case 1:
+				enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
+				enemies.push_back(new Enemy(enemy));
+				break;
+			case 2:
+				enemy.init("Enemy1F1.png", path, 1, Ability(), 150, 100, &towers, &player);
+				enemies.push_back(new Enemy(enemy));
+				break;
+			case 3:
+				enemy.init("Enemy1F1.png", path, 1, Ability(), 300, 100, &towers, &player);
+				enemies.push_back(new Enemy(enemy));
+				break;
+			default:
+				break;
+			}
+			
+		}
+	}
 
 	player.update(towers, gameTime.GetDeltaTime());
 
@@ -57,6 +73,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
+	mainLevel.draw();
+
 	for (Controller* t : towers)
 		t->draw();
 	
@@ -94,8 +113,6 @@ void ofApp::keyPressed(int key){
 		break;
 	}
 
-	//keyDown[key] = true;
-
 }
 
 //--------------------------------------------------------------
@@ -108,7 +125,6 @@ void ofApp::keyReleased(int key){
 	if (key == 'a' || key == 'd')
 		player.input.x = 0;
 
-	//keyDown[key] = false;
 }
 
 //--------------------------------------------------------------
@@ -178,15 +194,15 @@ void ofApp::dragEvent(ofDragInfo dragInfo){
 
 void BoundaryCollision(Controller* dynamic, int width, int height, ofVec4f& boundaries)
 {
-	if (dynamic->position.x < boundaries.x)
-		dynamic->position.x = boundaries.x;
+	if (dynamic->position.x < boundaries.x+32)
+		dynamic->position.x = boundaries.x+32;
 			   
-	if (dynamic->position.y < boundaries.y)
-		dynamic->position.y = boundaries.y;
+	if (dynamic->position.y < boundaries.y+32)
+		dynamic->position.y = boundaries.y+32;
 			   
-	if (dynamic->position.x > boundaries.z - width)
-		dynamic->position.x = boundaries.z - width;
+	if (dynamic->position.x > boundaries.z-32 - width)
+		dynamic->position.x = boundaries.z-32 - width;
 			   
-	if (dynamic->position.y > boundaries.w - height)
-		dynamic->position.y = boundaries.w - height;
+	if (dynamic->position.y > boundaries.w-32 - height)
+		dynamic->position.y = boundaries.w-32 - height;
 }

@@ -2,7 +2,13 @@
 
 #include "ofMain.h"
 #include "AnimationsContent.h"
+#include "Player.h"
+#include "Tower.h"
+#include "Enemy.h"
+#include "Ability.h"
 #include "DeltaTimer.h"
+#include "WaveManager.h"
+#include "Level.h"
 
 class ofApp : public ofBaseApp
 {
@@ -11,8 +17,21 @@ class ofApp : public ofBaseApp
 		void update();
 		void draw();
 
+		int enemyCounter;
+
+		Level mainLevel;
+		Player player;
+		Enemy enemy;
+		Tower activeTower;
+		bool placingTower = true;
+
+		vector<Controller*> towers;
+		vector<Controller*> enemies;
+		vector<ofVec2f> path;
 		DeltaTimer gameTime;
 		AnimationsContent frameData;
+
+		WaveManager waves;
 
 		void keyPressed(int key);
 		void keyReleased(int key);
