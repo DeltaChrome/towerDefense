@@ -1,26 +1,32 @@
 #pragma once
 #include "ofImage.h"
 #include "ofVec2f.h"
+#include "ofVec4f.h"
 #include "Ability.h"
+#include "Hitbox.h"
 #include "AnimationManager.h"
 
 class Controller
 {
-	AnimationManager AnimManager;
-
+private:
 	float stunDuration;
 	bool isStunned;
 	float iFrameDuration;
 	bool isImmune;
+	
+public:
+	virtual void init();
+	virtual void update();
+	void draw();
+
+	Hitbox hb;
+	AnimationManager animManager;
+
+	bool checkCollision(Hitbox& hitbox2);
+
 	ofImage sprite;
 	ofVec2f position;
 	Ability ability;
 	int maxHealth;
 	int currentHealth;
-
-public:
-	
-	virtual void update();
-	void draw();
-
 };

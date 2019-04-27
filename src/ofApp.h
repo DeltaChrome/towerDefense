@@ -2,17 +2,9 @@
 
 #include "ofMain.h"
 
-class ofApp : public ofBaseApp{
-
+class ofApp : public ofBaseApp
+{
 	public:
-
-		//array of player animations
-		//array of enemy animations(all or a select type)
-		//tower images
-		//
-
-
-
 		void setup();
 		void update();
 		void draw();

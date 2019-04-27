@@ -13,7 +13,7 @@ private:
 public:
 	
 	void init(vector<Animation>& animations);
-	void update();
-	void draw();
+	void update(float deltaTime);
+	void draw(ofVec2f position);
 
 };

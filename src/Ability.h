@@ -1,6 +1,7 @@
 #pragma once
 #include "ofTimer.h"
 #include "Hitbox.h"
+#include "AnimationManager.h"
 
 class Ability
 {
@@ -16,15 +17,16 @@ private:
 	float positionOffset;// might need to be a vec 3
 	float rotationOffset;
 	//animation manager
+	AnimationManager animManager;
 	//hitbox 
-	Hitbox box;
+	Hitbox hb;
 
 public:
 	inline bool IsReady() { return readyToBeUsed; }
 
-	void init(); //{ box.init(); } needs to take in parameters for boxs requirements
+	void init() { }
 	void update() { CheckCooldown(); };
-	void draw();
+	void draw() { }
 
 	void StartCooldown()
 	{
@@ -44,4 +46,3 @@ public:
 
 	float damage;
 };
-

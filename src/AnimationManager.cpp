@@ -6,15 +6,15 @@ void AnimationManager::init(vector<Animation>& a)//could add break points to see
 	//set first animation as current animation
 }
 
-void AnimationManager::update()
+void AnimationManager::update(float deltaTime)
 {
 	//if()current animation should be the same ***based on input from user***
 		//if it changed, then switch animations
 		//change to different animation in vector as current animation
-	currentAnimation->update();
+	currentAnimation->update(deltaTime);
 }
 
-void AnimationManager::draw()
+void AnimationManager::draw(ofVec2f position)
 {
-	currentAnimation->draw();
+	currentAnimation->draw(position);
 }
