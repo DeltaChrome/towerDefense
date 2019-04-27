@@ -1,5 +1,7 @@
 #pragma once
 #include "ofTimer.h"
+#include "Hitbox.h"
+#include "AnimationManager.h"
 
 class Ability
 {
@@ -15,9 +17,9 @@ private:
 	float positionOffset;// might need to be a vec 3
 	float rotationOffset;
 	//animation manager
+	AnimationManager animManager;
 	//hitbox 
-
-
+	Hitbox hb;
 
 public:
 	inline bool IsReady() { return readyToBeUsed; }
@@ -44,4 +46,3 @@ public:
 
 	float damage;
 };
-

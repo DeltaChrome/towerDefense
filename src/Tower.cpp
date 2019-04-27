@@ -15,8 +15,8 @@ void Tower::init(const char* sprite, ofVec2f& position, Ability& ability, float 
 	this->ability = ability;
 	this->range = range;
 
-	collisionBox = ofVec2f(32, 32);
-	collisionOffset = ofVec2f(0, 96);
+	hb.setHeight(32);
+	hb.setWidth(32);
 
 	currentHealth = maxHealth = health;
 }

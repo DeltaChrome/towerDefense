@@ -19,14 +19,20 @@ void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed,
 	this->player = player;
 	this->towers = towers;
 
-	collisionBox = ofVec2f(32, 32);
-	collisionOffset = ofVec2f(0, 0);
+	hb.setWidth(32);
+	hb.setHeight(32);
+	hb.setX(position.x);
+	hb.setY(position.y);
 
 	currentHealth = maxHealth = health;
 }
 
 void Enemy::update()
 {
+
+	hb.setX(position.x);
+	hb.setY(position.y);
+
 	Controller out_target;
 
 	// Moves only if a Target is not in range

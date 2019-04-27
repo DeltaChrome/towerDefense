@@ -1,5 +1,6 @@
 #pragma once
 #include "Controller.h"
+#include "Hitbox.h"
 
 class Tower : public Controller
 {
@@ -10,6 +11,7 @@ public:
 	void init(const char* sprite, ofVec2f& position, Ability& ability, float health, float range);
 	void update();
 
+	//Hitbox hb;
 	Controller target;
 	ofVec2f cursor;
 

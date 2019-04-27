@@ -1,26 +1,30 @@
 #include "Player.h"
 #include "Tower.h"
 
-Player::Player()
+void Player::init(vector<ofImage> animationFrames)
 {
-	
+	hb.setHeight(32);
+	hb.setWidth(32);
+
+	hb.setX(position.x);
+	hb.setY(position.y);
+
+	animManager.init(animationFrames, 16);
 }
 
-Player::~Player()
+void Player::update(std::vector<Controller*>& towers, float deltaTime)
 {
-}
 
-void Player::init(const char* sprite)
-{
-	this->sprite.load(sprite);
+	hb.setX(position.x);//might be better to just change to vec2
+	hb.setY(position.y);
 
-	collisionBox = ofVec2f(32, 32);
-	collisionOffset = ofVec2f(0, 0);
-}
-
-void Player::update(std::vector<Controller*>& towers)
-{
 	Move(towers);
+	animManager.update(deltaTime);
+}
+
+void Player::draw()
+{
+	animManager.draw(position);
 }
 
 void Player::Move(std::vector<Controller*>& towers)
@@ -30,7 +34,7 @@ void Player::Move(std::vector<Controller*>& towers)
 
 	for (Controller* t : towers)
 	{
-		if (Collision(t, moveVector))
+		if (hb.checkCollision(t->hb, moveVector.x, moveVector.y))
 		{
 			canMove = false;
 			break;
