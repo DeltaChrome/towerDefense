@@ -32,12 +32,12 @@ public:
 		this->type = t;
 	}
 
-	bool checkCollision(Hitbox &box)
+	bool checkCollision(Hitbox &box, float x_input, float y_input)
 	{
 
-		if ((x + w > box.x && x + w < box.x + box.w) || (x < box.x + box.w && x > box.x))
+		if ((x + x_input + w > box.x && x + x_input + w < box.x + box.w) || (x + x_input < box.x + box.w && x + x_input > box.x))
 		{
-			if ((y + h > box.y && y + h < box.y + box.h) || (y < box.y + h && y > box.y))
+			if ((y + y_input + h > box.y && y + y_input + h < box.y + box.h) || (y + y_input < box.y + h && y + y_input > box.y))
 				return true;
 			else
 				return false;
@@ -48,4 +48,19 @@ public:
 		}
 	}
 
+	bool ClickedOn(float mouse_x, float mouse_y)
+	{
+
+		if ((mouse_x > x && mouse_x < x + w))
+		{
+			if ((mouse_y < y + h && mouse_y > y))
+				return true;
+			else
+				return false;
+		}
+		else
+		{
+			return false;
+		}
+	}
 };

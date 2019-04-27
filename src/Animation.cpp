@@ -22,6 +22,7 @@ void Animation::update(float deltaTime)
 		currentFrame -= animationFrames.size();
 	}
 
+	
 }
 
 void Animation::draw(ofVec2f position)

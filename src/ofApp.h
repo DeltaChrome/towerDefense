@@ -9,6 +9,7 @@
 #include "DeltaTimer.h"
 #include "WaveManager.h"
 #include "Level.h"
+#include "Button.h"
 
 class ofApp : public ofBaseApp
 {
@@ -24,14 +25,19 @@ class ofApp : public ofBaseApp
 		Enemy enemy;
 		Tower activeTower;
 		bool placingTower = true;
+		DeltaTimer gameTime;
+		AnimationsContent frameData;
 
 		vector<Controller*> towers;
 		vector<Controller*> enemies;
 		vector<ofVec2f> path;
-		DeltaTimer gameTime;
-		AnimationsContent frameData;
 
 		WaveManager waves;
+
+		Button buttons[3];
+		ofTrueTypeFont font;
+
+		ofImage background;
 
 		void keyPressed(int key);
 		void keyReleased(int key);

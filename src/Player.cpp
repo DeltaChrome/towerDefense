@@ -12,6 +12,7 @@ void Player::init(vector<ofImage> animationFrames)
 
 	hb.setX(position.x);
 	hb.setY(position.y);
+
 	animManager.init(animationFrames, 16);
 }
 
@@ -38,7 +39,7 @@ void Player::Move(std::vector<Controller*>& towers)
 
 	for (Controller* t : towers)
 	{
-		if (checkCollision(t->hb))
+		if (hb.checkCollision(t->hb, moveVector.x, moveVector.y))
 		{
 			canMove = false;
 			break;

@@ -10,6 +10,17 @@ void ofApp::setup(){
 	frameData.init();
 	waves.init();
 
+	background.load("Floor.png");
+
+	// GUI
+	ofTrueTypeFont::setGlobalDpi(72);
+	font.load("verdana.ttf", 30, true, true);
+	font.setLineHeight(34.0f);
+	font.setLetterSpacing(1.035);
+
+	for (int i = 0; i < 3; i++)
+		buttons[i].init("Button.png", "ButtonSolid.png", 150 * i, ofGetWindowHeight() - 60, 150, 60);
+
 	path = { ofVec2f(100, 100), ofVec2f(800, 100), ofVec2f(800, 300), ofVec2f(100, 300), ofVec2f(100, 500), ofVec2f(800, 500) };
 
 	player.init(frameData.getAnimation(1));
@@ -65,7 +76,7 @@ void ofApp::update(){
 	
 	// Boundary (left x, top y, right x, bottom y)
 	BoundaryCollision(&player, 32, 32, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
-	BoundaryCollision(&activeTower, 32, 96, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
+	BoundaryCollision(&activeTower, 32, 96, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));//might need to change 96 to 32
 
 	//tick timer
 	gameTime.Update();
@@ -73,6 +84,7 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+	background.draw(0, 0);
 
 	mainLevel.draw();
 
@@ -86,6 +98,15 @@ void ofApp::draw(){
 
 	if (placingTower)
 		activeTower.draw();
+		
+	for (int i = 0; i < 3; i++)
+		buttons[i].draw();
+
+	if (placingTower)
+		activeTower.draw();
+
+	ofSetColor(225);
+	font.drawString("Hello World", 100, 100);
 }
 
 //--------------------------------------------------------------
@@ -125,6 +146,7 @@ void ofApp::keyReleased(int key){
 	if (key == 'a' || key == 'd')
 		player.input.x = 0;
 
+	//keyDown[key] = false;
 }
 
 //--------------------------------------------------------------
@@ -139,19 +161,30 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button) {
-	if (placingTower)
+	if (button == OF_MOUSE_BUTTON_LEFT)
 	{
-		if (button == OF_MOUSE_BUTTON_LEFT)
+		if (placingTower)
 		{
-			activeTower.position = ofVec2f(x, y);
 			activeTower.isPlaced = true;
+
+			activeTower.hb.setX(x);
+			activeTower.hb.setY(y);
+
 			towers.push_back(new Tower(activeTower));
-			
+
 			//cout << towers.size() << " - position: (" << towers[towers.size() - 1]->position.x << ", " << towers[towers.size() - 1]->position.y << ") | active position: (" << activeTower.position.x << ", " << activeTower.position.y << ")" << endl;
 
 			// Create a new tower;
 			//activeTower.init("tower.png", ofVec2f(0, 0), Ability(), 100, 10);
 			placingTower = false;
+		}
+		else
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				if (buttons[i].click(x, y))
+					cout << "Clicked: Button " << i + 1 << endl;
+			}
 		}
 	}
 
@@ -164,7 +197,11 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+	if (button == OF_MOUSE_BUTTON_LEFT)
+	{
+		for (int i = 0; i < 3; i++)
+			buttons[i].clicked = false;
+	}
 }
 
 //--------------------------------------------------------------
