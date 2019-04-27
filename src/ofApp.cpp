@@ -19,19 +19,24 @@ void BoundaryCollision(Controller* dynamic, int width, int height, ofVec4f& boun
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+
+	frameData.init();
 	path = { ofVec2f(100, 100), ofVec2f(800, 100), ofVec2f(800, 300), ofVec2f(100, 300), ofVec2f(100, 500), ofVec2f(800, 500) };
 
-	player.init("player.png");
+	player.init(frameData.getAnimation(1));
 	
-	enemy.init("player.png", path, 1, Ability(), 100, 100, &towers, &player);
+	enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
 	enemies.push_back(new Enemy(enemy));
 
-	activeTower.init("tower.png", ofVec2f(0, 0), Ability(), 100, 10);
+	activeTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 100, 10);
+
+	gameTime.Init();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
-	player.update(towers);
+
+	player.update(towers, gameTime.GetDeltaTime());
 
 	for (Controller* e : enemies)
 		e->update();
@@ -45,6 +50,9 @@ void ofApp::update(){
 	// Boundary (left x, top y, right x, bottom y)
 	BoundaryCollision(&player, 32, 32, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
 	BoundaryCollision(&activeTower, 32, 96, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
+
+	//tick timer
+	gameTime.Update();
 }
 
 //--------------------------------------------------------------
@@ -63,7 +71,7 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	
+
 	switch (key)
 	{
 	// Vertical
@@ -85,11 +93,13 @@ void ofApp::keyPressed(int key){
 	default:
 		break;
 	}
+
+	//keyDown[key] = true;
+
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key){
-	
 	// Vertical
 	if (key == 'w' || key == 's')
 		player.input.y = 0;
@@ -97,6 +107,8 @@ void ofApp::keyReleased(int key){
 	// Horizontal
 	if (key == 'a' || key == 'd')
 		player.input.x = 0;
+
+	//keyDown[key] = false;
 }
 
 //--------------------------------------------------------------

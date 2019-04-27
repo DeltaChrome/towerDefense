@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include "AnimationsContent.h"
+#include "DeltaTimer.h"
 
 class ofApp : public ofBaseApp
 {
@@ -8,6 +10,9 @@ class ofApp : public ofBaseApp
 		void setup();
 		void update();
 		void draw();
+
+		DeltaTimer gameTime;
+		AnimationsContent frameData;
 
 		void keyPressed(int key);
 		void keyReleased(int key);

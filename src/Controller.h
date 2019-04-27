@@ -18,11 +18,10 @@ public:
 	virtual void init();
 	virtual void update();
 	void draw();
+	bool checkCollision(Hitbox& hitbox2);
 
 	Hitbox hb;
 	AnimationManager animManager;
-
-	bool checkCollision(Hitbox& hitbox2);
 
 	ofImage sprite;
 	ofVec2f position;

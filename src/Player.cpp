@@ -1,17 +1,7 @@
 #include "Player.h"
 #include "Tower.h"
 
-Player::Player()
-{
-	
-}
-
-Player::~Player()
-{
-
-}
-
-void Player::init(const char* sprite)
+void Player::init(vector<ofImage> animationFrames)
 {
 	
 	hb.setHeight(32);
@@ -19,7 +9,7 @@ void Player::init(const char* sprite)
 
 	hb.setX(position.x);
 	hb.setY(position.y);
-	//animManager.init();  needs animations
+	animManager.init(animationFrames, 16);
 }
 
 void Player::update(std::vector<Controller*>& towers, float deltaTime)
@@ -39,6 +29,7 @@ void Player::draw()
 
 void Player::Move(std::vector<Controller*>& towers)
 {
+
 	ofVec2f moveVector = ofVec2f(input.x, input.y).normalize() * moveSpeed;
 	bool canMove = true;
 

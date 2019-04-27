@@ -2,6 +2,8 @@
 
 void Animation::init(vector<ofImage> Frames)
 {
+	currentFrame = 0;
+	currentTime = 0;
 	animationFrames = Frames;
 }
 
@@ -9,9 +11,11 @@ void Animation::update(float deltaTime)
 {
 	currentTime += deltaTime;
 
-	while (currentTime >= (1.0f / 24.0f))//(float)frameRate of animation
+	cout << currentTime << endl;
+
+	while (currentTime >= (1.0f / 16.0f))//(float)frameRate of animation
 	{
-		currentTime -= 1.0f / 24.0f;
+		currentTime -= 1.0f / 16.0f;
 		++currentFrame;
 	}
 
@@ -19,9 +23,11 @@ void Animation::update(float deltaTime)
 	{
 		currentFrame -= animationFrames.size();
 	}
+
+	
 }
 
 void Animation::draw(ofVec2f position)
 {
-	animationFrames[currentFrame].draw(position); //IDK why this doesnt work
+	animationFrames[currentFrame].draw(position);
 }

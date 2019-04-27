@@ -9,7 +9,7 @@ private:
 	
 public:
 
-	void init(const char* sprite);
+	void init(vector<ofImage> animationFrames);
 	void update(std::vector<Controller*>& towers, float deltaTime);
 
 	void draw(); 
