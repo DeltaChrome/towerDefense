@@ -6,11 +6,11 @@ void BoundaryCollision(Controller* dynamic, int width, int height, ofVec4f& boun
 //--------------------------------------------------------------
 void ofApp::setup(){
 
+	srand(time(NULL));
+
 	mainLevel.init();
 	frameData.init();
 	waves.init();
-
-	background.load("Floor.png");
 
 	// GUI
 	ofTrueTypeFont::setGlobalDpi(72);
@@ -21,62 +21,53 @@ void ofApp::setup(){
 	for (int i = 0; i < 3; i++)
 		buttons[i].init("Button.png", "ButtonSolid.png", 150 * i, ofGetWindowHeight() - 60, 150, 60);
 
+	//init path for enemies
 	path = { ofVec2f(100, 100), ofVec2f(800, 100), ofVec2f(800, 300), ofVec2f(100, 300), ofVec2f(100, 500), ofVec2f(800, 500) };
 
+	//init player
 	player.init(frameData.getAnimation(1));
-	
-	enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
-	enemies.push_back(new Enemy(enemy));
 
+	//init towers
 	activeTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 100, 10);
-
+	
+	//init timer
 	gameTime.Init();
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 
+	fps.newFrame();
+
+	//update wave manager
 	waves.update(gameTime.GetDeltaTime());
 
-	if (waves.getNewWave())
-	{
-		if (waves.getSpawn())
-		{
-			switch (waves.getEnemyLevel())
-			{
-			case 1:
-				enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
-				enemies.push_back(new Enemy(enemy));
-				break;
-			case 2:
-				enemy.init("Enemy1F1.png", path, 1, Ability(), 150, 100, &towers, &player);
-				enemies.push_back(new Enemy(enemy));
-				break;
-			case 3:
-				enemy.init("Enemy1F1.png", path, 1, Ability(), 300, 100, &towers, &player);
-				enemies.push_back(new Enemy(enemy));
-				break;
-			default:
-				break;
-			}
-			
-		}
-	}
+	//check to spawn enemy
+	newSpawn();
 
-	player.update(towers, gameTime.GetDeltaTime());
+	//update player
+	player.update(towers, gameTime.GetDeltaTime(), mainLevel.getHitBoxes(), enemies);
 
+	//update enemies
 	for (Controller* e : enemies)
 		e->update();
 
+	//update towers
 	for (Controller* t : towers)
 		t->update();
+
+	//update coins
+	for (Coin* c : coins)
+		c->update(gameTime.GetDeltaTime(), &player);
 	
 	if (placingTower)
 		activeTower.update();
 	
 	// Boundary (left x, top y, right x, bottom y)
 	BoundaryCollision(&player, 32, 32, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
-	BoundaryCollision(&activeTower, 32, 96, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));//might need to change 96 to 32
+	BoundaryCollision(&activeTower, 32, 32, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
+
+	fps.update();
 
 	//tick timer
 	gameTime.Update();
@@ -84,7 +75,6 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	background.draw(0, 0);
 
 	mainLevel.draw();
 
@@ -93,6 +83,9 @@ void ofApp::draw(){
 	
 	for (Controller* e : enemies)
 		e->draw();
+
+	for (Coin* c : coins)
+		c->draw();
 
 	player.draw();
 
@@ -106,7 +99,7 @@ void ofApp::draw(){
 		activeTower.draw();
 
 	ofSetColor(225);
-	font.drawString("Hello World", 100, 100);
+	font.drawString(to_string(fps.getFps()), 100, 100);
 }
 
 //--------------------------------------------------------------
@@ -146,7 +139,6 @@ void ofApp::keyReleased(int key){
 	if (key == 'a' || key == 'd')
 		player.input.x = 0;
 
-	//keyDown[key] = false;
 }
 
 //--------------------------------------------------------------
@@ -242,4 +234,36 @@ void BoundaryCollision(Controller* dynamic, int width, int height, ofVec4f& boun
 			   
 	if (dynamic->position.y > boundaries.w-32 - height)
 		dynamic->position.y = boundaries.w-32 - height;
+}
+
+void ofApp::newSpawn()
+{
+	if (waves.getNewWave())
+	{
+		if (waves.getSpawn())
+		{
+			switch (waves.getEnemyLevel())
+			{
+			case 1:
+				enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
+				enemies.push_back(new Enemy(enemy));
+				break;
+			case 2:
+				enemy.init("Enemy1F1.png", path, 1, Ability(), 150, 100, &towers, &player);
+				enemies.push_back(new Enemy(enemy));
+				break;
+			case 3:
+				enemy.init("Enemy1F1.png", path, 1, Ability(), 300, 100, &towers, &player);
+				enemies.push_back(new Enemy(enemy));
+				break;
+			default:
+				break;
+			}
+			for (int i = 0; i < 2; i++)
+			{
+				coinTemp.init("Coin.png");
+				coins.push_back(new Coin(coinTemp));
+			}
+		}
+	}
 }

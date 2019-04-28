@@ -10,6 +10,7 @@ void Level::draw()
 {
 	background.draw(0, 0);
 
+	//edges
 	for (int i = 0; i < 32; i++)
 	{
 		wall.draw(i * 32, 0);
@@ -24,19 +25,33 @@ void Level::draw()
 
 		wall.draw(i * 32, 32 * 11);
 
-		if (i != 12 && i != 13 && i != 14)
+		if (i != 11 && i != 12 && i != 13 && i != 14)
 		{
 			wall.draw((i - 10) * 32, 32 * 14);
 		}
 
 		wall.draw((i - 10) * 32, 32 * 17);
-
-		if (i != 13 && i != 14 && i != 18 && i != 19 && i != 20)
-		{
-			wall.draw(i * 32, 32 * 7 + i * 32);
-		}
 		
 	}
+
+	//horizontal
+	tempHB.init(10 * 32, 32 * 8, 32 * 10, 32, 0, 1);
+	hbs.push_back(Hitbox(tempHB));
+
+	tempHB.init(10 * 32, 32 * 11, 32 * 10, 32, 0, 1);
+	hbs.push_back(Hitbox(tempHB));
+
+	tempHB.init(1 * 32, 32 * 17, 32 * 9, 32, 0, 1);
+	hbs.push_back(Hitbox(tempHB));
+
+	tempHB.init(5 * 32, 32 * 14, 32 * 5, 32, 0, 1);
+	hbs.push_back(Hitbox(tempHB));
+
+	////vertical
+	//tempHB.init(5 * 32, 32 * 14, 32, 32 * 4, 0, 1);
+	//hbs.push_back(Hitbox(tempHB));
+
+
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -44,11 +59,17 @@ void Level::draw()
 		wall.draw((i + 22) * 32, 32 * 18);
 
 	}
+	tempHB.init(22 * 32, 32 * 14, 32 * 5, 32, 0, 1);
+	hbs.push_back(Hitbox(tempHB));
+
+	tempHB.init(22 * 32, 32 * 18, 32 * 5, 32, 0, 1);
+	hbs.push_back(Hitbox(tempHB));
+
 
 	wall.draw(27 * 32, 32 * 15);
 	wall.draw(27 * 32, 32 * 16);
 	wall.draw(27 * 32, 32 * 17);
-	tempHB.init(27 * 32, 32 * 15, 32, 32 * 3, 0, 1);
+	tempHB.init(27 * 32, 32 * 15, 32, 32 * 4, 0, 1);
 	hbs.push_back(Hitbox(tempHB));
 
 	wall.draw(27 * 32, 32 * 1);
@@ -58,7 +79,7 @@ void Level::draw()
 	wall.draw(27 * 32, 32 * 5);
 	wall.draw(27 * 32, 32 * 6);
 	wall.draw(27 * 32, 32 * 7);
-	tempHB.init(27 * 32, 32 * 1, 32, 32 * 7, 0, 1);
+	tempHB.init(27 * 32, 32 * 1, 32, 32 * 8, 0, 1);
 	hbs.push_back(Hitbox(tempHB));
 
 

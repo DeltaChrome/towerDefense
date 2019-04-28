@@ -10,6 +10,9 @@
 #include "WaveManager.h"
 #include "Level.h"
 #include "Button.h"
+#include "Coin.h"
+#include "TowerGem.h"
+#include <time.h>
 
 class ofApp : public ofBaseApp
 {
@@ -18,12 +21,16 @@ class ofApp : public ofBaseApp
 		void update();
 		void draw();
 
+		ofFpsCounter fps;
+
 		int enemyCounter;
 
 		Level mainLevel;
 		Player player;
 		Enemy enemy;
 		Tower activeTower;
+		Coin coinTemp;
+		TowerGem towerGemTemp;
 		bool placingTower = true;
 		DeltaTimer gameTime;
 		AnimationsContent frameData;
@@ -31,6 +38,8 @@ class ofApp : public ofBaseApp
 		vector<Controller*> towers;
 		vector<Controller*> enemies;
 		vector<ofVec2f> path;
+		vector<Coin*> coins;
+		vector<TowerGem> towerGems;
 
 		WaveManager waves;
 
@@ -50,5 +59,6 @@ class ofApp : public ofBaseApp
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+		void newSpawn();
 		
 };

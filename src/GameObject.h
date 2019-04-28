@@ -1,10 +1,13 @@
 #pragma once
 #include "ofMain.h"
+#include "Hitbox.h"
+#include "Controller.h"
 
 class GameObject
 {
-private:
+protected:
 
+	Hitbox hb;
 	ofImage sprite;
 	ofVec2f position;
 	bool visible;
@@ -23,10 +26,26 @@ public:
 
 	void init(string fileName)
 	{
-		visible = false;
+		visible = true;
 		sprite.load(fileName);
+
+		position.x = rand() % 900 - 96;
+		position.y = rand() % 800 - 96;
+		hb.init(position.x,position.y,32,32,1,1);
 	}
-	void update(float deltaTime);
-	void draw() { sprite.draw(position); }
+
+	virtual void update(float deltaTime, Controller* player)
+	{
+		hb.setX(position.x);
+		hb.setY(position.y);
+	}
+
+	void draw()
+	{
+		if (visible)
+		{
+			sprite.draw(position);
+		} 
+	}
 
 };

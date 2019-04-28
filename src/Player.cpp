@@ -16,13 +16,13 @@ void Player::init(vector<ofImage> animationFrames)
 	animManager.init(animationFrames, 16);
 }
 
-void Player::update(std::vector<Controller*>& towers, float deltaTime)
+void Player::update(std::vector<Controller*>& towers, float deltaTime, vector<Hitbox>& walls, vector<Controller*>& enemies)
 {
 
-	hb.setX(position.x);//might be better to just change to vec2
+	hb.setX(position.x);
 	hb.setY(position.y);
 
-	Move(towers);
+	Move(towers, walls, enemies);
 	animManager.update(deltaTime);
 }
 
@@ -31,7 +31,7 @@ void Player::draw()
 	animManager.draw(position);
 }
 
-void Player::Move(std::vector<Controller*>& towers)
+void Player::Move(vector<Controller*>& towers, vector<Hitbox>& walls, vector<Controller*>& enemies)
 {
 
 	ofVec2f moveVector = ofVec2f(input.x, input.y).normalize() * moveSpeed;
@@ -45,6 +45,25 @@ void Player::Move(std::vector<Controller*>& towers)
 			break;
 		}
 	}
+
+	for (Controller* e : enemies)
+	{
+		if (hb.checkCollision(e->hb, moveVector.x, moveVector.y))
+		{
+			canMove = false;
+			break;
+		}
+	}
+
+	for (int i = 0; i < walls.size(); i++)
+	{
+		if (hb.checkCollision(walls[i], moveVector.x, moveVector.y))
+		{
+			canMove = false;
+			break;
+		}
+	}
+
 
 	if (canMove)
 		position += moveVector;

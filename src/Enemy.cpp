@@ -19,10 +19,7 @@ void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed,
 	this->player = player;
 	this->towers = towers;
 
-	hb.setWidth(32);
-	hb.setHeight(32);
-	hb.setX(position.x);
-	hb.setY(position.y);
+	hb.init(position.x, position.y, 32, 32, 0, 1);
 
 	currentHealth = maxHealth = health;
 }

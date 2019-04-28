@@ -13,12 +13,15 @@ private:
 	bool isStunned;
 	float iFrameDuration;
 	bool isImmune;
+	int money;
 	
 public:
 	virtual void init();
 	virtual void update();
 	void draw();
 	bool checkCollision(Hitbox& hitbox2);
+	void addMoney(int m) { money += m; }
+	//add onDeath function
 
 	Hitbox hb;
 	AnimationManager animManager;
