@@ -31,7 +31,7 @@ class ofApp : public ofBaseApp
 		Tower activeTower;
 		Coin coinTemp;
 		TowerGem towerGemTemp;
-		bool placingTower = true;
+		bool placingTower = false;
 		DeltaTimer gameTime;
 		AnimationsContent frameData;
 
