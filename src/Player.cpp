@@ -1,8 +1,9 @@
 #include "Player.h"
 #include "Tower.h"
 
-void Player::init(vector<ofImage> animationFrames)
+void Player::init(vector<ofImage> animationFrames, int maxHealth)
 {
+	this->maxHealth = currentHealth = maxHealth;
 
 	position.x = 100;
 	position.y = 650;
