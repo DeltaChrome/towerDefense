@@ -14,21 +14,27 @@ void ofApp::setup(){
 
 	// GUI
 	ofTrueTypeFont::setGlobalDpi(72);
-	font.load("verdana.ttf", 30, true, true);
+	font.load("verdana.ttf", 24, true, true);
 	font.setLineHeight(34.0f);
 	font.setLetterSpacing(1.035);
 
-	for (int i = 0; i < 3; i++)
-		buttons[i].init("Button.png", "ButtonSolid.png", 150 * i, ofGetWindowHeight() - 60, 150, 60);
+	Tower blueTower;
+	blueTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 50, 10);
+	Tower pinkTower;
+	pinkTower.init("PinkTower.png", ofVec2f(0, 0), Ability(), 100, 20);
+	Tower redTower;
+	redTower.init("RedTower.png", ofVec2f(0, 0), Ability(), 200, 30);
+
+	buttons[0].init("Button.png", "ButtonSolid.png", 0, ofGetWindowHeight() - 60, 150, 60, blueTower);
+	buttons[1].init("Button.png", "ButtonSolid.png", 150, ofGetWindowHeight() - 60, 150, 60, pinkTower);
+	buttons[2].init("Button.png", "ButtonSolid.png", 300, ofGetWindowHeight() - 60, 150, 60, redTower);
 
 	path = { ofVec2f(100, 100), ofVec2f(800, 100), ofVec2f(800, 300), ofVec2f(100, 300), ofVec2f(100, 500), ofVec2f(800, 500) };
 
-	player.init(frameData.getAnimation(1));
+	player.init(frameData.getAnimation(1), 100);
 	
 	enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
 	enemies.push_back(new Enemy(enemy));
-
-	activeTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 100, 10);
 
 	gameTime.Init();
 }
@@ -100,13 +106,15 @@ void ofApp::draw(){
 		activeTower.draw();
 		
 	for (int i = 0; i < 3; i++)
-		buttons[i].draw();
+		buttons[i].draw(font, costs[i]);
 
 	if (placingTower)
 		activeTower.draw();
 
 	ofSetColor(225);
-	font.drawString("Hello World", 100, 100);
+	string playerHealth = "Health: " + to_string(player.currentHealth) + "/" + to_string(player.maxHealth);
+	font.drawString(playerHealth, ofGetWindowWidth() - 280, ofGetWindowHeight() - 40);
+	font.drawString(to_string(coin), ofGetWindowWidth() - 280, ofGetWindowHeight() - 12);
 }
 
 //--------------------------------------------------------------
@@ -169,29 +177,32 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 			activeTower.hb.setX(x);
 			activeTower.hb.setY(y);
-
 			towers.push_back(new Tower(activeTower));
 
-			//cout << towers.size() << " - position: (" << towers[towers.size() - 1]->position.x << ", " << towers[towers.size() - 1]->position.y << ") | active position: (" << activeTower.position.x << ", " << activeTower.position.y << ")" << endl;
-
-			// Create a new tower;
-			//activeTower.init("tower.png", ofVec2f(0, 0), Ability(), 100, 10);
 			placingTower = false;
 		}
 		else
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				if (buttons[i].click(x, y))
-					cout << "Clicked: Button " << i + 1 << endl;
+				if (buttons[i].click(x, y) && coin >= costs[i])
+				{
+					coin -= costs[i];
+
+					activeTower = buttons[i].tower;
+					activeTower.cursor = ofVec2f(x, y);
+					placingTower = true;
+					activeTower.isPlaced = false;
+				}
 			}
 		}
 	}
 
 	if (button == OF_MOUSE_BUTTON_RIGHT)
 	{
-		activeTower.isPlaced = false;
-		placingTower = true;
+		placingTower = false;
+
+		coin += 5;
 	}
 }
 

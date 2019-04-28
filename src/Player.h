@@ -9,7 +9,7 @@ private:
 	
 public:
 
-	void init(vector<ofImage> animationFrames);
+	void init(vector<ofImage> animationFrames, int maxHealth);
 	void update(std::vector<Controller*>& towers, float deltaTime);
 
 	void draw(); 
