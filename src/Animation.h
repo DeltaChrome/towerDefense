@@ -6,7 +6,6 @@ class Animation
 private:
 
 	vector<ofImage> animationFrames;
-	int startFrame;
 	int currentFrame;
 	float currentTime;
 

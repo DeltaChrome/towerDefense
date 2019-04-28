@@ -14,7 +14,6 @@ public:
 		hb.setX(position.x);
 		hb.setY(position.y);
 
-
 		if (visible == true)
 		{
 			if (hb.checkCollision(player->hb, 0, 0))

@@ -34,6 +34,7 @@ void ofApp::setup(){
 
 	//init player
 	player.init(frameData.getAnimation(1), 100);
+	crosshair.load("Crosshair.png");
 
 	//init towers
 	activeTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 100, 10);
@@ -67,7 +68,21 @@ void ofApp::update(){
 	//update coins
 	for (Coin* c : coins)
 		c->update(gameTime.GetDeltaTime(), &player);
-	
+
+	for (int i = 0; i < coins.size(); i++)
+	{
+		if (!coins[i]->getVisiblility())
+		{
+			coins.erase(coins.begin() + i);
+			i--;
+			if (coins.size() == i - 1)
+			{
+				break;
+			}
+		}
+		
+	}
+
 	if (placingTower)
 		activeTower.update();
 	
@@ -116,8 +131,15 @@ void ofApp::draw(){
 	ofSetColor(225);
 	//font.drawString(to_string(fps.getFps()), 100, 100);
 	string playerHealth = "Health: " + to_string(player.currentHealth) + "/" + to_string(player.maxHealth);
+	string waveNumber = "Wave Number: " + to_string(waves.getWaveNum());
+	string money = "Money: " + to_string(player.getMoney());
+
 	font.drawString(playerHealth, ofGetWindowWidth() - 280, ofGetWindowHeight() - 40);
-	font.drawString(to_string(player.getMoney()), ofGetWindowWidth() - 280, ofGetWindowHeight() - 12);
+	font.drawString(money, ofGetWindowWidth() - 280, ofGetWindowHeight() - 12);
+	font.drawString(waveNumber, ofGetWindowWidth() / 2 -100, 27);
+
+	crosshair.draw(mouseX - 16, mouseY - 16);
+
 }
 
 //--------------------------------------------------------------
@@ -204,12 +226,19 @@ void ofApp::mousePressed(int x, int y, int button) {
 				{
 					if (enemies[i]->hb.ClickedOn(x, y))
 					{
-						enemies[i]->currentHealth -= 100;
+						enemies[i]->currentHealth -= 25;
 						player.setLastClick(0.0f);
 						if (enemies[i]->currentHealth <= 0)
 						{
+							waves.changeEnemiesAlive(-1);
+
+							coinTemp.init("Coin.png");
+							coinTemp.setPosition(enemies[i]->position.x, enemies[i]->position.y);
+							coins.push_back(new Coin(coinTemp));
+
 							enemies.erase(enemies.begin() + i);
 							i--;
+							
 							if (enemies.size() == i - 1)
 							{
 								break;
@@ -219,9 +248,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 				}
 				
 			}
-
-			cout << x << endl;
-			cout << y << endl;
 
 		}
 	}
@@ -305,11 +331,10 @@ void ofApp::newSpawn()
 			default:
 				break;
 			}
-			for (int i = 0; i < 2; i++)
-			{
-				coinTemp.init("Coin.png");
-				coins.push_back(new Coin(coinTemp));
-			}
+			
+			coinTemp.init("Coin.png");
+			coins.push_back(new Coin(coinTemp));
+			
 		}
 	}
 }

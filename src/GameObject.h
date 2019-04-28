@@ -23,6 +23,7 @@ public:
 	void setYPosition(float y) { position.set(position.x, y); }
 	float getXPosition() { return position.x; }
 	float getYPosition() { return position.y; }
+	bool getVisiblility() { return visible; }
 
 	void init(string fileName)
 	{

@@ -53,6 +53,7 @@ public:
 		{
 			spawnNewEnemy = false;
 		}
+
 	}
 
 	void startWave()
@@ -94,10 +95,11 @@ public:
 		}
 	}
 
+	int getWaveNum() { return waveNum; }
 	int getSpawnNumber() { return numEnemies; }
 	int getEnemyLevel() { return enemyLevel; }
 	bool getNewWave() { return newWave; }
 	bool getSpawn() { return spawnNewEnemy; }
-
+	void changeEnemiesAlive(int enemiesAlive) { numEnemiesAlive += enemiesAlive; }
 };
 
