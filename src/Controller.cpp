@@ -5,7 +5,8 @@ void Controller::update() {}
 
 void Controller::draw()
 {
-	sprite.draw(position);
+	if (visible)
+		sprite.draw(position);
 }
 
 bool Controller::checkCollision(Hitbox& hitbox2)

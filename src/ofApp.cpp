@@ -33,7 +33,7 @@ void ofApp::setup(){
 	path = { ofVec2f(100, 100), ofVec2f(800, 100), ofVec2f(800, 300), ofVec2f(100, 300), ofVec2f(100, 500), ofVec2f(800, 500) };
 
 	//init player
-	player.init(frameData.getAnimation(1));
+	player.init(frameData.getAnimation(1), 100);
 
 	//init towers
 	activeTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 100, 10);
@@ -102,7 +102,7 @@ void ofApp::draw(){
 		
 	for (int i = 0; i < 3; i++)
 	{
-		if (coin >= costs[i])
+		if (player.getMoney() >= costs[i])
 			ofSetColor(225);
 		else
 			ofSetColor(60);
@@ -117,7 +117,7 @@ void ofApp::draw(){
 	//font.drawString(to_string(fps.getFps()), 100, 100);
 	string playerHealth = "Health: " + to_string(player.currentHealth) + "/" + to_string(player.maxHealth);
 	font.drawString(playerHealth, ofGetWindowWidth() - 280, ofGetWindowHeight() - 40);
-	font.drawString(to_string(coin), ofGetWindowWidth() - 280, ofGetWindowHeight() - 12);
+	font.drawString(to_string(player.getMoney()), ofGetWindowWidth() - 280, ofGetWindowHeight() - 12);
 }
 
 //--------------------------------------------------------------
@@ -187,9 +187,9 @@ void ofApp::mousePressed(int x, int y, int button) {
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				if (buttons[i].click(x, y) && coin >= costs[i])
+				if (buttons[i].click(x, y) && player.getMoney() >= costs[i])
 				{
-					coin -= costs[i];
+					player.addMoney(-costs[i]);
 
 					activeTower = buttons[i].tower;
 					activeTower.cursor = ofVec2f(x, y);
@@ -197,6 +197,32 @@ void ofApp::mousePressed(int x, int y, int button) {
 					activeTower.isPlaced = false;
 				}
 			}
+
+			for (int i = 0; i < enemies.size(); i++)
+			{
+				if (player.getLastClick() > 1.0)
+				{
+					if (enemies[i]->hb.ClickedOn(x, y))
+					{
+						enemies[i]->currentHealth -= 100;
+						player.setLastClick(0.0f);
+						if (enemies[i]->currentHealth <= 0)
+						{
+							enemies.erase(enemies.begin() + i);
+							i--;
+							if (enemies.size() == i - 1)
+							{
+								break;
+							}
+						}
+					}
+				}
+				
+			}
+
+			cout << x << endl;
+			cout << y << endl;
+
 		}
 	}
 
@@ -204,7 +230,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 	{
 		placingTower = false;
 
-		coin += 5;
 	}
 }
 

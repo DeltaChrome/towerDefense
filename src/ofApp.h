@@ -47,7 +47,7 @@ class ofApp : public ofBaseApp
 		int costs[3] = { 30, 60, 120 };
 		ofTrueTypeFont font;
 
-		int coin = 0;
+		//int coin = 0;
 
 		ofImage background;
 

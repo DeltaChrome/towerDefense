@@ -10,6 +10,8 @@ Enemy::~Enemy()
 
 void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed, Ability& ability, float health, float range, std::vector<Controller*>* towers, Controller* player)
 {
+	visible = true;
+
 	this->sprite.load(sprite);
 	this->path = path;
 	this->position = path[0];
@@ -26,6 +28,11 @@ void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed,
 
 void Enemy::update()
 {
+
+	if (currentHealth <= 0)
+	{
+		dead();
+	}
 
 	hb.setX(position.x);
 	hb.setY(position.y);

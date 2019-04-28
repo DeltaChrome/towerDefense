@@ -10,7 +10,6 @@ public:
 
 	void init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed, Ability& ability, float health, float range, std::vector<Controller*>* towers, Controller* player);
 	void update();
-	Hitbox hb;
 
 private:
 

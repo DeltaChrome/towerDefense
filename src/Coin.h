@@ -14,8 +14,6 @@ public:
 		hb.setX(position.x);
 		hb.setY(position.y);
 
-		cout << visible << endl;
-
 
 		if (visible == true)
 		{

@@ -3,6 +3,10 @@
 
 void Player::init(vector<ofImage> animationFrames, int maxHealth)
 {
+	visible = true;
+
+	timeSinceLastClick = 5.0f;
+
 	this->maxHealth = currentHealth = maxHealth;
 
 	position.x = 100;
@@ -19,6 +23,7 @@ void Player::init(vector<ofImage> animationFrames, int maxHealth)
 
 void Player::update(std::vector<Controller*>& towers, float deltaTime, vector<Hitbox>& walls, vector<Controller*>& enemies)
 {
+	timeSinceLastClick += deltaTime;
 
 	hb.setX(position.x);
 	hb.setY(position.y);
@@ -29,7 +34,8 @@ void Player::update(std::vector<Controller*>& towers, float deltaTime, vector<Hi
 
 void Player::draw()
 {
-	animManager.draw(position);
+	if(visible)
+		animManager.draw(position);
 }
 
 void Player::Move(vector<Controller*>& towers, vector<Hitbox>& walls, vector<Controller*>& enemies)

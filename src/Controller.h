@@ -8,21 +8,24 @@
 
 class Controller
 {
-private:
-	float stunDuration;
-	bool isStunned;
-	float iFrameDuration;
-	bool isImmune;
+protected: 
 	int money;
-	
+	bool visible;
+
+
 public:
 	virtual void init();
 	virtual void update();
 	void draw();
 	bool checkCollision(Hitbox& hitbox2);
 	void addMoney(int m) { money += m; }
-	//add onDeath function
 
+	void dead()
+	{
+		visible = false;
+		//drop item
+	}
+	
 	Hitbox hb;
 	AnimationManager animManager;
 
