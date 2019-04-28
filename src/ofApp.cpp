@@ -106,7 +106,14 @@ void ofApp::draw(){
 		activeTower.draw();
 		
 	for (int i = 0; i < 3; i++)
+	{
+		if (coin >= costs[i])
+			ofSetColor(225);
+		else
+			ofSetColor(60);
+
 		buttons[i].draw(font, costs[i]);
+	}
 
 	if (placingTower)
 		activeTower.draw();
