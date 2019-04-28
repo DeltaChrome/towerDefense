@@ -5,21 +5,17 @@
 class Enemy : public Controller
 {
 public:
-	Enemy();
-	~Enemy();
-
-	void init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed, Ability& ability, float health, float range, std::vector<Controller*>* towers, Controller* player);
-	void update();
+	void init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed, Ability& ability, float health, float range, Controller* player);
+	void update(float deltaTime);
 
 private:
 
-	void Attack(Controller& target);
-	bool IsInRange(std::vector<Controller*>& towers, Controller* player, Controller& out_target);
+	void Attack(Controller* target);
+	bool IsInRange(Controller* player);
 
+	Controller* out_target = nullptr;
 	Controller* player;
-	std::vector<Controller*>* towers;
 	std::vector<ofVec2f> path;
-	bool isAttacking;
 	float agroRange;
 	float moveSpeed;
 

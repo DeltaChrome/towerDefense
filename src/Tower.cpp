@@ -1,15 +1,9 @@
 #include "Tower.h"
 
-Tower::Tower()
-{
-}
-
-Tower::~Tower()
-{
-}
-
 void Tower::init(const char* sprite, ofVec2f& position, Ability& ability, float health, float range)
 {
+	timeSinceLastClick = 5;
+
 	this->sprite.load(sprite);
 	this->position = position;
 	this->ability = ability;
@@ -21,33 +15,30 @@ void Tower::init(const char* sprite, ofVec2f& position, Ability& ability, float 
 	currentHealth = maxHealth = health;
 }
 
-void Tower::update()
+void Tower::update(float deltaTime)
 {
+	timeSinceLastClick += deltaTime;
+
 	if (!isPlaced)
 	{
 		position = cursor;
 		return;
 	}
 
-	// Temporary -- Used for compiler: Remove when Game Manager is finished and use the enemies stored in their instead
-	std::vector<Controller*> enemies;
-	
-	if (IsInRange(enemies, target))
-		Attack(target);
-}
-
-void Tower::Attack(Controller& target)
-{
-	// if the tower's ability is off-cooldown then attack
-	if (ability.IsReady())
+	if (IsInRange(enemies))
 	{
-		isAttacking = true;
-		target.currentHealth -= ability.damage;
-		ability.StartCooldown();
+		if(getLastClick() > ability.cooldownTime)
+			Attack(out_target);
 	}
 }
 
-bool Tower::IsInRange(std::vector<Controller*>& enemies, Controller& out_target)
+void Tower::Attack(Controller* target)
+{
+	target->currentHealth -= ability.damage;
+	setLastClick(0.0f);
+}
+
+bool Tower::IsInRange(std::vector<Controller*>& enemies)
 {
 	float distance = 0.0f;
 	float closestDistance = -1.0f;
@@ -61,7 +52,7 @@ bool Tower::IsInRange(std::vector<Controller*>& enemies, Controller& out_target)
 		if (closestDistance < 0)
 			closestDistance = distance;
 
-		if (distance <= range && closestDistance >= distance)
+		if ((distance <= range) && (distance <= closestDistance))
 		{
 			closestDistance = distance;
 			index = i;
@@ -70,8 +61,11 @@ bool Tower::IsInRange(std::vector<Controller*>& enemies, Controller& out_target)
 	
 	// Return false if no targets are within range
 	if (index < 0)
+	{
+		out_target = nullptr;
 		return false;
+	}
 
-	out_target = *enemies[index];
+	out_target = enemies[index];
 	return true;
 }

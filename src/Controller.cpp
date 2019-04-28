@@ -1,7 +1,7 @@
 #include "Controller.h"
 
 void Controller::init() {}
-void Controller::update() {}
+void Controller::update(float deltaTime) {}
 
 void Controller::draw()
 {

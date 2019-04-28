@@ -1,15 +1,9 @@
 #include "Enemy.h"
 
-Enemy::Enemy()
+void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed, Ability& ability, float health, float range, Controller* player)
 {
-}
+	timeSinceLastClick = 99;
 
-Enemy::~Enemy()
-{
-}
-
-void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed, Ability& ability, float health, float range, std::vector<Controller*>* towers, Controller* player)
-{
 	visible = true;
 
 	this->sprite.load(sprite);
@@ -19,15 +13,15 @@ void Enemy::init(const char* sprite, std::vector<ofVec2f> path, float moveSpeed,
 	this->ability = ability;
 	this->agroRange = range;
 	this->player = player;
-	this->towers = towers;
-
+	
 	hb.init(position.x, position.y, 32, 32, 0, 1);
 
 	currentHealth = maxHealth = health;
 }
 
-void Enemy::update()
+void Enemy::update(float deltaTime)
 {
+	timeSinceLastClick += deltaTime;
 
 	if (currentHealth <= 0)
 	{
@@ -37,10 +31,10 @@ void Enemy::update()
 	hb.setX(position.x);
 	hb.setY(position.y);
 
-	Controller out_target;
+	bool isInRange = IsInRange(player);
 
 	// Moves only if a Target is not in range
-	if (!IsInRange(*towers, player, out_target))
+	if (!isInRange)
 	{
 		if (currentPathIndex + 1 < path.size())
 		{
@@ -51,55 +45,28 @@ void Enemy::update()
 				currentPathIndex++;
 		}
 	}
-}
-
-void Enemy::Attack(Controller& target)
-{
-	// if the tower's ability is off-cooldown then attack
-	if (ability.IsReady())
+	else
 	{
-		isAttacking = true;
-		target.currentHealth -= ability.damage;
-		ability.StartCooldown();
+		if (getLastClick() > ability.cooldownTime)
+			Attack(out_target);
 	}
 }
 
-bool Enemy::IsInRange(std::vector<Controller*>& towers, Controller* player, Controller& out_target)
+void Enemy::Attack(Controller* target)
 {
-	float distance = 0.0f;
-	float closestDistance = -1.0f;
-	bool targetPlayer = false;
-	int index = -1;
+	cout << "attacking" << endl;
+	target->currentHealth -= ability.damage;
+	setLastClick(0.0f);
+}
 
+bool Enemy::IsInRange(Controller* player)
+{
 	if (position.distance(player->position) <= agroRange)
 	{
-		targetPlayer = true;
-		out_target = *player;
+		out_target = player;
+		return true;
 	}
 
-	if (!targetPlayer)
-	{
-		for (int i = 0; i < towers.size(); i++)
-		{
-			// Checking if enemies are within Towers range -- For now returns closest target
-			distance = position.distance(towers[i]->position);
-
-			if (closestDistance < 0)
-				closestDistance = distance;
-
-			if (distance <= agroRange && closestDistance >= distance)
-			{
-				closestDistance = distance;
-				index = i;
-			}
-		}
-
-		// Return false if no targets are within range
-		if (index < 0)
-			return false;
-	
-		out_target = *towers[index];
-	}
-	
-	return true;
+	out_target = nullptr;
+	return false;
 }

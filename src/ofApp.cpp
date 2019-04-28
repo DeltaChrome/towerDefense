@@ -19,11 +19,11 @@ void ofApp::setup(){
 	font.setLetterSpacing(1.035);
 
 	Tower blueTower;
-	blueTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 50, 10);
+	blueTower.init("BlueTower.png", ofVec2f(0, 0), Ability(100, 0), 50, 10);
 	Tower pinkTower;
-	pinkTower.init("PinkTower.png", ofVec2f(0, 0), Ability(), 100, 20);
+	pinkTower.init("PinkTower.png", ofVec2f(0, 0), Ability(100, 0), 100, 20);
 	Tower redTower;
-	redTower.init("RedTower.png", ofVec2f(0, 0), Ability(), 200, 30);
+	redTower.init("RedTower.png", ofVec2f(0, 0), Ability(100, 0), 200, 30);
 
 	buttons[0].init("Button.png", "ButtonSolid.png", 0, ofGetWindowHeight() - 60, 150, 60, blueTower);
 	buttons[1].init("Button.png", "ButtonSolid.png", 150, ofGetWindowHeight() - 60, 150, 60, pinkTower);
@@ -36,9 +36,6 @@ void ofApp::setup(){
 	player.init(frameData.getAnimation(1), 100);
 	crosshair.load("Crosshair.png");
 
-	//init towers
-	activeTower.init("BlueTower.png", ofVec2f(0, 0), Ability(), 100, 10);
-	
 	//init timer
 	gameTime.Init();
 }
@@ -59,11 +56,14 @@ void ofApp::update(){
 
 	//update enemies
 	for (Controller* e : enemies)
-		e->update();
+		e->update(gameTime.GetDeltaTime());
 
 	//update towers
 	for (Controller* t : towers)
-		t->update();
+	{
+		t->setEnemies(enemies);
+		t->update(gameTime.GetDeltaTime());
+	}
 
 	//update coins
 	for (Coin* c : coins)
@@ -84,7 +84,7 @@ void ofApp::update(){
 	}
 
 	if (placingTower)
-		activeTower.update();
+		activeTower.update(gameTime.GetDeltaTime());
 	
 	// Boundary (left x, top y, right x, bottom y)
 	BoundaryCollision(&player, 32, 32, ofVec4f(0, 0, ofGetWindowWidth(), ofGetWindowHeight()));
@@ -98,6 +98,8 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+
+	ofSetColor(255);
 
 	mainLevel.draw();
 
@@ -246,7 +248,6 @@ void ofApp::mousePressed(int x, int y, int button) {
 						}
 					}
 				}
-				
 			}
 
 		}
@@ -317,15 +318,15 @@ void ofApp::newSpawn()
 			switch (waves.getEnemyLevel())
 			{
 			case 1:
-				enemy.init("Enemy1F1.png", path, 1, Ability(), 100, 100, &towers, &player);
+				enemy.init("Enemy1F1.png", path, 1, Ability(5, 10), 100, 100, &player);
 				enemies.push_back(new Enemy(enemy));
 				break;
 			case 2:
-				enemy.init("Enemy1F1.png", path, 1, Ability(), 150, 100, &towers, &player);
+				enemy.init("Enemy1F1.png", path, 1, Ability(10, 10), 150, 100, &player);
 				enemies.push_back(new Enemy(enemy));
 				break;
 			case 3:
-				enemy.init("Enemy1F1.png", path, 1, Ability(), 300, 100, &towers, &player);
+				enemy.init("Enemy1F1.png", path, 1, Ability(20, 10), 300, 100, &player);
 				enemies.push_back(new Enemy(enemy));
 				break;
 			default:
